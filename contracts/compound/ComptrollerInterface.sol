@@ -20,6 +20,7 @@ contract ComptrollerInterface {
     function borrowAllowed(address cToken, address borrower, uint borrowAmount) external returns (uint);
     function borrowVerify(address cToken, address borrower, uint borrowAmount) external;
 
+
     function repayBorrowAllowed(
         address cToken,
         address payer,
@@ -68,4 +69,7 @@ contract ComptrollerInterface {
         address cTokenBorrowed,
         address cTokenCollateral,
         uint repayAmount) external view returns (uint, uint);
+
+
+    function getAccountLiquidity(address account) external view returns (uint, uint, uint);
 }

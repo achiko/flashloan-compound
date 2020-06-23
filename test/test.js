@@ -39,35 +39,66 @@ contract('Flashloan', accounts  => {
         console.log('Flashloan Address : ', flashLoanInstance.address);
     });
 
-    it('Send Dai to Flashloan Smartcontract', async () => { 
 
-        // let daibalance = await makerDai.methods.balanceOf( accounts[7]).call();
-        // console.log('DaiBalance ',  daibalance );
+    it('Call Liquidation', async () => { 
 
-        // console.log('Send 30 Dai To Flashloan Contract ');
-        // let transfer = await makerDai.methods.transfer( flashLoanInstance.address, '10000000000000000000').send({
-        //     from : accounts[7],
-        //     ...gasParams
-        // });
+        let daibalance = await makerDai.methods.balanceOf( accounts[7] ).call();
+        console.log('DaiBalance ',  daibalance );
+
+        console.log('Send 30 Dai To Flashloan Contract ');
+        let transfer = await makerDai.methods.transfer( flashLoanInstance.address, '10000000000000000000').send({
+            from : accounts[7],
+            ...gasParams
+        });
         
-        // console.log( transfer.events  );
+        console.log( transfer.events  );
 
-        // console.log('Flashloan balance : ',  await makerDai.methods.balanceOf(flashLoanInstance.address).call() )
+        console.log('Flashloan balance : ',  await makerDai.methods.balanceOf(flashLoanInstance.address).call() )
+
+        console.log('Set Comptorller Interface : ');
+        let _comptrollerAddress = "0x3d9819210a31b4961b30ef54be2aed79b9c9cd3b";
+        let txSetComptroller = await flashLoanInstance.setComptroller(_comptrollerAddress, { from : accounts[0] });
 
         console.log('Call Flashloan Function !!! ');
         let txData = web3.eth.abi.encodeParameters([ 'uint256' ], [66666]);
-        console.log(txData);
-        let txFlashloan = await flashLoanInstance.flashloan({from : accounts[7], data : txData, ... gasParams});
         
-        console.log(txFlashloan)
-        
-        console.log( JSON.stringify(txFlashloan) );
-        // console.log('/---------------------------/');
-        // console.log(txFlashloan.logs[0].args);
-        // console.log('/--------------------------/');
-        // console.log(txFlashloan.logs[1].args);
+        //address borrower, uint repayAmount, CTokenInterface cTokenCollateral
 
+
+        let _borrower = "0x331e97bdf4239313674d1f0d9799d804da4b88ff";
+        let _repayAmount = '5000000000000000000';
+        let _cTockenBorroued = "0x39aa39c021dfbae8fac545936693ac917d5e7563"; // cUscd
+        let _cTokenCollateral = "0xf5dce57282a584d2746faf1593d3121fcac444dc"; // cDai
+
+
+        let txFlashloan = await flashLoanInstance.flashloan(_borrower, _repayAmount, _cTockenBorroued, _cTokenCollateral ,
+                {from : accounts[7], data : txData, ... gasParams });
+        
+        // txFlashloan.logs.map( (log) => {
+        //     console.log('Event : ', log.event);
+        //     console.log(log.args['0']);
+        //     console.log('Value :  ',  new BigNumber( log.args['0'] ).toNumber()  );
+        //     console.log('--------------------------')
+        // });
+
+        console.log( txFlashloan.logs );
+
+        // console.log(' ----  ---- ');
+        // let { '0': error, '1' : liqudity , '2' : shortfall  } = txFlashloan.logs[1].args;
+        // console.log( 'Error : ', new BigNumber(error).toNumber() );
+        // console.log( 'liqudity : ', new BigNumber(liqudity).toNumber() );
+        // console.log( 'shortfall : ', new BigNumber(shortfall).toNumber() );
+
+        console.log('----------------------');
+        
+        let { 1:liquidity, 2: shortfall } = await comptroller.methods.getAccountLiquidity(lenderAdderss).call();
+        //let { 1:liquidity, 2: shortfall } = response;
+        
+        console.log('Liquidity', liquidity);
+        console.log('Shortfall', shortfall);
+        
         assert.equal(true, true, 'True is Always True !!!');
+
     });
 
 
@@ -139,8 +170,6 @@ contract('Flashloan', accounts  => {
 
         assert.equal(true,true);
 
-
     });
-
 
 });
