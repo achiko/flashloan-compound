@@ -1,7 +1,7 @@
 // Original: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/math/SafeMath.sol
 
 //pragma solidity ^0.5.0;
-pragma solidity >=0.5.16 <0.7.0;
+pragma solidity >=0.6.2;
 
 /**
  * @dev Wrappers over Solidity's arithmetic operations with added overflow

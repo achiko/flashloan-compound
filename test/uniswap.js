@@ -1,20 +1,20 @@
 let Flashloan = artifacts.require("Flashloan");
 const { legos }  = require("@studydefi/money-legos");
-const PriceOracleProxyAbi = require('./data/PriceOracleProxy.json');
+let Swap = artifacts.require("Swap");
 const BigNumber = require('bignumber.js');
 const Web3 = require('web3');
 
+let swapInstance = null;
 
-contract('Flashloan', accounts  => {
+contract('Flashloan', accounts  => { 
 
     before('Setup Contract', async () => { 
-        flashLoanInstance = await Flashloan.deployed();
-        console.log('Flashloan Address : ', flashLoanInstance.address);
+        swapInstance = await Swap.deployed();
+        console.log('Swap Router Address : ', swapInstance.address);
     });
 
     it('Call Liquidation', async () => {  
-
-        AssertPlus(true, true);
+        assert(true, true);
     });
 
 });

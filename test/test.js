@@ -103,13 +103,13 @@ contract('Flashloan', accounts  => {
         //console.log(txFlashloan.logs);
         console.log('---------------');
         
-        let { _balance } = txFlashloan.logs[0].args;
-        console.log('Balance : ', new BigNumber(_balance).toNumber() );
+        // let { _balance } = txFlashloan.logs[0].args;
+        // console.log('Balance : ', new BigNumber(_balance).toNumber() );
         
-        console.log('----------------');
+        // console.log('----------------');
         
-        let { _redeemError } = txFlashloan.logs[1].args;
-        console.log('_redeemError : ', new BigNumber(_redeemError).toNumber());
+        // let { _redeemError } = txFlashloan.logs[1].args;
+        // console.log('_redeemError : ', new BigNumber(_redeemError).toNumber());
 
         // console.log('----------------------');
         // console.log( txFlashloan.logs[3].args );

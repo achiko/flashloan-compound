@@ -1,7 +1,7 @@
 // Original: https://github.com/aave/aave-protocol/blob/master/contracts/flashloan/interfaces/IFlashLoanReceiver.sol
 
 //pragma solidity ^0.5.0;
-pragma solidity >=0.4.21 <0.7.0
+pragma solidity >=0.6.2;
 
 /**
 * @title IFlashLoanReceiver interface
@@ -10,5 +10,5 @@ pragma solidity >=0.4.21 <0.7.0
 * @dev implement this interface to develop a flashloan-compatible flashLoanReceiver contract
 **/
 interface IFlashLoanReceiver {
-    function executeOperation(address _reserve, uint256 _amount, uint256 _fee, bytes calldata _params) external;
+    function executeOperation(address _reserve, uint256 _amount, uint256 _fee, bytes calldata _params)  external;
 }

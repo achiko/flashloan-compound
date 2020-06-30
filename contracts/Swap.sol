@@ -1,5 +1,5 @@
 //pragma solidity ^0.5.15;
-pragma solidity >=0.5.16 <0.7.0;
+pragma solidity >=0.6.2;
 
 import './uniswap/IUniswapV2Router02.sol';
 
@@ -11,7 +11,7 @@ contract Swap {
 
     }
 
-    function myName () public view returns (string name) {
+    function myName () public view returns (string memory name) {
         name = "Uniswap";
     }
 

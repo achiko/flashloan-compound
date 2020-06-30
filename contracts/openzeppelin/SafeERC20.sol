@@ -1,7 +1,7 @@
 // Original: https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC20/SafeERC20.sol
 
 //pragma solidity ^0.5.0;
-pragma solidity >=0.5.16 <0.7.0;
+pragma solidity >=0.6.2;
 
 import "./IERC20.sol";
 import "./SafeMath.sol";

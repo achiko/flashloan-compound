@@ -1,0 +1,516 @@
+{
+  "contractName": "Swap",
+  "abi": [
+    {
+      "inputs": [],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "uniswapRouter",
+      "outputs": [
+        {
+          "internalType": "contract IUniswapV2Router01",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "myName",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.2+commit.bacdbe57\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"myName\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"uniswapRouter\",\"outputs\":[{\"internalType\":\"contract IUniswapV2Router01\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/Swap.sol\":\"Swap\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/Swap.sol\":{\"keccak256\":\"0x8a67f4e9c7b8153bfdfe4a5eccb2420191374537d4c1f13076e43caab7202fb0\",\"urls\":[\"bzz-raw://3301477cd6ff957cd5dcc4dbbfbbcdcf882a61ea57ee8947394147d9d45223b6\",\"dweb:/ipfs/QmW62rsVCo6hexjPanSRFvWAgn6uormvjS1VX1bvZkD5Z1\"]},\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/uniswap/IUniswapV2Router01.sol\":{\"keccak256\":\"0x8a3c5c449d4b7cd76513ed6995f4b86e4a86f222c770f8442f5fc128ce29b4d2\",\"urls\":[\"bzz-raw://1df63ca373dafae3bd0ee7fe70f890a1dc7c45ed869c01de68413e0e97ff9deb\",\"dweb:/ipfs/QmefJgEYGUL8KX7kQKYTrDweF8GB7yjy3nw5Bmqzryg7PG\"]},\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/uniswap/IUniswapV2Router02.sol\":{\"keccak256\":\"0x744e30c133bd0f7ca9e7163433cf6d72f45c6bb1508c2c9c02f1a6db796ae59d\",\"urls\":[\"bzz-raw://9bf2f4454ad63d4cff03a0630e787d9e8a9deed80aec89682cd8ad6379d9ef8c\",\"dweb:/ipfs/Qme51hQNR2wpax7ooUadhtqLtXm8ffeVVYyubLkTT4wMCG\"]}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b506101a0806100206000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c8063735de9f71461003b578063fae2dd4b14610085575b600080fd5b610043610108565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61008d61012d565b6040518080602001828103825283818151815260200191508051906020019080838360005b838110156100cd5780820151818401526020810190506100b2565b50505050905090810190601f1680156100fa5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60606040518060400160405280600781526020017f556e69737761700000000000000000000000000000000000000000000000000081525090509056fea264697066735822122016cc6bc56259807dcec99cd6ed44187c3d0bd0ed7c3299ad96a44cbc4dd0c00d64736f6c63430006020033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b50600436106100365760003560e01c8063735de9f71461003b578063fae2dd4b14610085575b600080fd5b610043610108565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b61008d61012d565b6040518080602001828103825283818151815260200191508051906020019080838360005b838110156100cd5780820151818401526020810190506100b2565b50505050905090810190601f1680156100fa5780820380516001836020036101000a031916815260200191505b509250505060405180910390f35b6000809054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60606040518060400160405280600781526020017f556e69737761700000000000000000000000000000000000000000000000000081525090509056fea264697066735822122016cc6bc56259807dcec99cd6ed44187c3d0bd0ed7c3299ad96a44cbc4dd0c00d64736f6c63430006020033",
+  "sourceMap": "97:199:2:-:0;;;164:30;8:9:-1;5:2;;;30:1;27;20:12;5:2;164:30:2;97:199;;;;;;",
+  "deployedSourceMap": "97:199:2:-:0;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;97:199:2;;;;;;;;;;;;;;;;;;;;;;;;118:39;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;200:93;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;200:93:2;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;118:39;;;;;;;;;;;;;:::o;200:93::-;240:18;270:16;;;;;;;;;;;;;;;;;;;200:93;:::o",
+  "source": "//pragma solidity ^0.5.15;\npragma solidity >=0.6.2;\n\nimport './uniswap/IUniswapV2Router02.sol';\n\ncontract Swap {\n\n    IUniswapV2Router01 public uniswapRouter;\n\n    constructor () public {\n\n    }\n\n    function myName () public view returns (string memory name) {\n        name = \"Uniswap\";\n    }\n\n}",
+  "sourcePath": "/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/Swap.sol",
+  "ast": {
+    "absolutePath": "/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/Swap.sol",
+    "exportedSymbols": {
+      "Swap": [
+        315
+      ]
+    },
+    "id": 316,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 297,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.6",
+          ".2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "27:24:2"
+      },
+      {
+        "absolutePath": "/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/uniswap/IUniswapV2Router02.sol",
+        "file": "./uniswap/IUniswapV2Router02.sol",
+        "id": 298,
+        "nodeType": "ImportDirective",
+        "scope": 316,
+        "sourceUnit": 2420,
+        "src": "53:42:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 315,
+        "linearizedBaseContracts": [
+          315
+        ],
+        "name": "Swap",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "functionSelector": "735de9f7",
+            "id": 300,
+            "name": "uniswapRouter",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 315,
+            "src": "118:39:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IUniswapV2Router01_$2331",
+              "typeString": "contract IUniswapV2Router01"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 299,
+              "name": "IUniswapV2Router01",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2331,
+              "src": "118:18:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IUniswapV2Router01_$2331",
+                "typeString": "contract IUniswapV2Router01"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 303,
+              "nodeType": "Block",
+              "src": "186:8:2",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 304,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 301,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "176:2:2"
+            },
+            "returnParameters": {
+              "id": 302,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "186:0:2"
+            },
+            "scope": 315,
+            "src": "164:30:2",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 313,
+              "nodeType": "Block",
+              "src": "260:33:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 311,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 309,
+                      "name": "name",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 307,
+                      "src": "270:4:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_string_memory_ptr",
+                        "typeString": "string memory"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "556e6973776170",
+                      "id": 310,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "string",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "277:9:2",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_stringliteral_99c45e8ee5dde061ced9c812089094fbd28a020e7e37f2851198887e5ca64985",
+                        "typeString": "literal_string \"Uniswap\""
+                      },
+                      "value": "Uniswap"
+                    },
+                    "src": "270:16:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  "id": 312,
+                  "nodeType": "ExpressionStatement",
+                  "src": "270:16:2"
+                }
+              ]
+            },
+            "documentation": null,
+            "functionSelector": "fae2dd4b",
+            "id": 314,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "myName",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 305,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "216:2:2"
+            },
+            "returnParameters": {
+              "id": 308,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 307,
+                  "name": "name",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 314,
+                  "src": "240:18:2",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 306,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "240:6:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "239:20:2"
+            },
+            "scope": 315,
+            "src": "200:93:2",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 316,
+        "src": "97:199:2"
+      }
+    ],
+    "src": "27:269:2"
+  },
+  "legacyAST": {
+    "absolutePath": "/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/Swap.sol",
+    "exportedSymbols": {
+      "Swap": [
+        315
+      ]
+    },
+    "id": 316,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 297,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.6",
+          ".2"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "27:24:2"
+      },
+      {
+        "absolutePath": "/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/uniswap/IUniswapV2Router02.sol",
+        "file": "./uniswap/IUniswapV2Router02.sol",
+        "id": 298,
+        "nodeType": "ImportDirective",
+        "scope": 316,
+        "sourceUnit": 2420,
+        "src": "53:42:2",
+        "symbolAliases": [],
+        "unitAlias": ""
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "documentation": null,
+        "fullyImplemented": true,
+        "id": 315,
+        "linearizedBaseContracts": [
+          315
+        ],
+        "name": "Swap",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "constant": false,
+            "functionSelector": "735de9f7",
+            "id": 300,
+            "name": "uniswapRouter",
+            "nodeType": "VariableDeclaration",
+            "overrides": null,
+            "scope": 315,
+            "src": "118:39:2",
+            "stateVariable": true,
+            "storageLocation": "default",
+            "typeDescriptions": {
+              "typeIdentifier": "t_contract$_IUniswapV2Router01_$2331",
+              "typeString": "contract IUniswapV2Router01"
+            },
+            "typeName": {
+              "contractScope": null,
+              "id": 299,
+              "name": "IUniswapV2Router01",
+              "nodeType": "UserDefinedTypeName",
+              "referencedDeclaration": 2331,
+              "src": "118:18:2",
+              "typeDescriptions": {
+                "typeIdentifier": "t_contract$_IUniswapV2Router01_$2331",
+                "typeString": "contract IUniswapV2Router01"
+              }
+            },
+            "value": null,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 303,
+              "nodeType": "Block",
+              "src": "186:8:2",
+              "statements": []
+            },
+            "documentation": null,
+            "id": 304,
+            "implemented": true,
+            "kind": "constructor",
+            "modifiers": [],
+            "name": "",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 301,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "176:2:2"
+            },
+            "returnParameters": {
+              "id": 302,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "186:0:2"
+            },
+            "scope": 315,
+            "src": "164:30:2",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "public"
+          },
+          {
+            "body": {
+              "id": 313,
+              "nodeType": "Block",
+              "src": "260:33:2",
+              "statements": [
+                {
+                  "expression": {
+                    "argumentTypes": null,
+                    "id": 311,
+                    "isConstant": false,
+                    "isLValue": false,
+                    "isPure": false,
+                    "lValueRequested": false,
+                    "leftHandSide": {
+                      "argumentTypes": null,
+                      "id": 309,
+                      "name": "name",
+                      "nodeType": "Identifier",
+                      "overloadedDeclarations": [],
+                      "referencedDeclaration": 307,
+                      "src": "270:4:2",
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_string_memory_ptr",
+                        "typeString": "string memory"
+                      }
+                    },
+                    "nodeType": "Assignment",
+                    "operator": "=",
+                    "rightHandSide": {
+                      "argumentTypes": null,
+                      "hexValue": "556e6973776170",
+                      "id": 310,
+                      "isConstant": false,
+                      "isLValue": false,
+                      "isPure": true,
+                      "kind": "string",
+                      "lValueRequested": false,
+                      "nodeType": "Literal",
+                      "src": "277:9:2",
+                      "subdenomination": null,
+                      "typeDescriptions": {
+                        "typeIdentifier": "t_stringliteral_99c45e8ee5dde061ced9c812089094fbd28a020e7e37f2851198887e5ca64985",
+                        "typeString": "literal_string \"Uniswap\""
+                      },
+                      "value": "Uniswap"
+                    },
+                    "src": "270:16:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_memory_ptr",
+                      "typeString": "string memory"
+                    }
+                  },
+                  "id": 312,
+                  "nodeType": "ExpressionStatement",
+                  "src": "270:16:2"
+                }
+              ]
+            },
+            "documentation": null,
+            "functionSelector": "fae2dd4b",
+            "id": 314,
+            "implemented": true,
+            "kind": "function",
+            "modifiers": [],
+            "name": "myName",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 305,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "216:2:2"
+            },
+            "returnParameters": {
+              "id": 308,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 307,
+                  "name": "name",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 314,
+                  "src": "240:18:2",
+                  "stateVariable": false,
+                  "storageLocation": "memory",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_string_memory_ptr",
+                    "typeString": "string"
+                  },
+                  "typeName": {
+                    "id": 306,
+                    "name": "string",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "240:6:2",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_string_storage_ptr",
+                      "typeString": "string"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "239:20:2"
+            },
+            "scope": 315,
+            "src": "200:93:2",
+            "stateMutability": "view",
+            "virtual": false,
+            "visibility": "public"
+          }
+        ],
+        "scope": 316,
+        "src": "97:199:2"
+      }
+    ],
+    "src": "27:269:2"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.2+commit.bacdbe57.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.2.0",
+  "updatedAt": "2020-06-30T11:52:20.382Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}

@@ -1,5 +1,5 @@
 //pragma solidity ^0.5.15;
-pragma solidity >=0.5.16 <0.7.0;
+pragma solidity >=0.6.2;
 
 import "./aave/FlashLoanReceiverBase.sol";
 import "./aave/ILendingPoolAddressesProvider.sol";
@@ -44,7 +44,7 @@ contract Flashloan is FlashLoanReceiverBase {
         uint256 _fee,
         bytes calldata _params
     )
-        external
+        external override
     {
         require(_amount <= getBalanceInternal(address(this), _reserve), "Invalid balance, was the flashLoan successful?");
         //emit ExecuteOpreationEvent(_reserve, _amount, _fee, _params);

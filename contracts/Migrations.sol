@@ -1,6 +1,6 @@
 // This file is part of Truffle suite and helps keep track of your deployments
 
-pragma solidity >=0.4.21 <0.7.0;
+pragma solidity >=0.6.2;
 
 contract Migrations {
   address public owner;
