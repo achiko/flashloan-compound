@@ -31,10 +31,9 @@ contract Flashloan is FlashLoanReceiverBase {
 
     ComptrollerInterface public comptroller;
 
+    
     constructor() public {
         owner = msg.sender;
-        // USDCAddress = _USDCAddress;
-        // DaiAddress = _DaiAddress;
     }
 
 
