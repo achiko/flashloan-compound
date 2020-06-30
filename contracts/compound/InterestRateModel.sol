@@ -1,4 +1,5 @@
-pragma solidity ^0.5.16;
+//pragma solidity ^0.5.16;
+pragma solidity >=0.5.16 <0.7.0;
 
 /**
   * @title Compound's InterestRateModel Interface

@@ -1,6 +1,7 @@
 // Original: https://github.com/aave/aave-protocol/blob/master/contracts/flashloan/base/FlashLoanReceiverBase.sol
 
-pragma solidity ^0.5.0;
+//pragma solidity ^0.5.0;
+pragma solidity >=0.4.21 <0.7.0
 
 import "../openzeppelin/SafeMath.sol";
 import "../openzeppelin/IERC20.sol";

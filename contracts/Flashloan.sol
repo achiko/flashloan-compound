@@ -1,4 +1,5 @@
-pragma solidity ^0.5.15;
+//pragma solidity ^0.5.15;
+pragma solidity >=0.5.16 <0.7.0;
 
 import "./aave/FlashLoanReceiverBase.sol";
 import "./aave/ILendingPoolAddressesProvider.sol";
@@ -18,16 +19,22 @@ contract Flashloan is FlashLoanReceiverBase {
     event GetAccountLiquidity( uint Error, uint liquidity, uint shortfall );
     event GetUnderlyingAddress(address _underlyingaddress);
     event LiquidationEvent(uint _err);
+    event CTokenBalance(uint _balance);
+    event RedddemEvent(uint _redeemError);
+    event Test(address pool, uint amount);
 
     uint256 public fee;
     address public owner;
-    address public USDCAddress;
-    address public DaiAddress;
+
+    // address public USDCAddress;
+    // address public DaiAddress;
 
     ComptrollerInterface public comptroller;
 
     constructor() public {
-        owner = msg.sender; 
+        owner = msg.sender;
+        // USDCAddress = _USDCAddress;
+        // DaiAddress = _DaiAddress;
     }
 
 
@@ -40,40 +47,47 @@ contract Flashloan is FlashLoanReceiverBase {
         external
     {
         require(_amount <= getBalanceInternal(address(this), _reserve), "Invalid balance, was the flashLoan successful?");
-        emit ExecuteOpreationEvent(_reserve, _amount, _fee, _params);
+        //emit ExecuteOpreationEvent(_reserve, _amount, _fee, _params);
 
         /* Decode _params */
-        (address _borrower, uint _repayAmount,
+        (
+            address _borrower,
+            uint _repayAmount,
             address _cTockenRepay,
-            address _cTokenCollateral) = abi.decode(_params,(address,uint,address,address));
+            address _cTokenCollateral
+
+        ) = abi.decode(_params,(address,uint,address,address));
 
         /* Get Account Liqudity Again before Contract Call */
-        /*
-        (uint err, uint liquidity, uint shortfall) = comptroller.getAccountLiquidity(_borrower);
-        emit GetAccountLiquidity(err, liquidity, shortfall);
-        */
+        // (uint err, uint liquidity, uint shortfall) = comptroller.getAccountLiquidity(_borrower);
+        // //emit GetAccountLiquidity(err, liquidity, shortfall);
+        // require(err == 0, "Error getAccountLiquidity Function");
+        // require(shortfall != 0, "Account is healthy");
+        // require(liquidity == 0, "Account is healthy");
 
-        /** To Do :  Add require flag here liquidity Shortfall != 0 */
-
-        /* Approve Tokens  */
         /* Get Underlying Token address Bat, Usdc etc...  */
         address underlyingAddress = CErc20Storage(_cTockenRepay).underlying();
-        emit GetUnderlyingAddress(underlyingAddress);
+        //emit GetUnderlyingAddress(underlyingAddress);
 
         /* Approve this(address) for underlying token  */
-        IERC20(underlyingAddress).approve(address(this), _repayAmount);
+        IERC20(underlyingAddress).approve(_cTockenRepay, _repayAmount);
 
         /* Call Comptroller Liquidation */
-        /* liquidateBorrow(address borrower, uint repayAmount, CTokenInterface cTokenCollateral) */
-        (uint err) = CErc20Interface(_cTockenRepay).liquidateBorrow(_borrower, _repayAmount, CTokenInterface(_cTokenCollateral));
-        emit LiquidationEvent(err);
+        (uint err1) = CErc20Interface(_cTockenRepay).liquidateBorrow(_borrower, _repayAmount, CTokenInterface(_cTokenCollateral));
+        //emit LiquidationEvent(err1);
+        //require(err1==0, "Liquidation Error !!! ");
 
+        /* Get CToken Balance */
+        uint cTokenBalance = CTokenInterface(_cTokenCollateral).balanceOf(address(this));
+        emit CTokenBalance(cTokenBalance);
+        
         /* Redeem Liquidated assets From CToken */
-
-        /* Check CToken Balance */
+        (uint err2) = CErc20Interface(_cTokenCollateral).redeem(cTokenBalance);
+        emit RedddemEvent(err2);
 
         /* Start Uniswap Procedure */
 
+        /* If Collatreall asset is Dai or USDC or USDT do not run uniswap selling procedure */
 
         // Time to transfer the funds back
         fee = _fee;
@@ -83,17 +97,24 @@ contract Flashloan is FlashLoanReceiverBase {
     }
 
 
-    function flashloan(address _borrower, uint _repayAmount, CTokenInterface _cTockenRepay, CTokenInterface _cTokenCollateral) public {
+
+    function flashloan(
+        address _borrower,
+        uint _repayAmount,
+        CTokenInterface _cTockenRepay,
+        CTokenInterface _cTokenCollateral
+    )
+        public
+    {
 
         /* Encode Passed Data */
         bytes memory data = abi.encode(_borrower,_repayAmount,_cTockenRepay,_cTokenCollateral);
+        /* Get Underlying Token address Bat, Usdc etc...  */
+        address underlyingAddress = CErc20Storage(address(_cTockenRepay)).underlying();
 
-        /* To Do Modyfy by passed repayAmount */
-        uint amount = 1 ether;
-        address asset = address(0x6B175474E89094C44Da98b954EedeAC495271d0F); // Mainnet DAI
-
+        //emit Test(asset, amount);
         ILendingPool lendingPool = ILendingPool(addressesProvider.getLendingPool());
-        lendingPool.flashLoan(address(this), asset, amount, data);
+        lendingPool.flashLoan(address(this), underlyingAddress, _repayAmount, data);
     }
 
 
@@ -104,7 +125,6 @@ contract Flashloan is FlashLoanReceiverBase {
 
     // function getContractBalance() public returns 
     // function getContractErc20Balance() public returns
-    
     // function  transferTokens( _toAddress ) 
 
 }
