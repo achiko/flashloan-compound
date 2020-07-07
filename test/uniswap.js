@@ -22,11 +22,59 @@ contract('Flashloan', accounts  => {
     before('Setup Contract', async () => { 
         swapInstance = await Swap.deployed();
         console.log('Swap Contract Address : ', swapInstance.address);
+    });
+
+    it('Converts ETH to any tokens', async() => {
+
+        let _account = accounts[5];
+
+        // function convertETHtoAnyToken(uint _amount, address _tokensOut) public payable {
+        console.log('Swap 1 ETH to USDC');
+
+        let _amount = new BigNumber(1).times(10**18).toFixed();
+        let _tokensOut = legos.erc20.usdc.address;
+        let tx = await swapInstance.convertETHtoAnyToken(_tokensOut, swapInstance.address, { 
+            from : _account, 
+            value : _amount, 
+            ...gasParams 
+        });  
         
+        //console.log(tx.logs[0].args.amounts);
+        let _amounts = tx.logs[0].args.amounts;
+
+        console.log('Amounts  1 : ', new BigNumber(_amounts[0]).toFixed());
+        console.log('Amounts  2 : ', new BigNumber(_amounts[1]).toFixed());
+
+        console.log('------------------------------');
+        let usdcBalance = new BigNumber( await usdc.methods.balanceOf(swapInstance.address).call() ).toNumber();
+        
+        console.log('USDC Balance : ', usdcBalance);
+
+        console.log('Convert USDC Balance to Dai : ');
+        let _deadline = new BigNumber( await swapInstance.getNow()).toFixed();
+        
+        // await usdc.methods.approve( swapInstance.address, usdcBalance);
+
+        //function convertTokensToTokens(uint _tokenInAmount, address _tokenInAddress, address _tokenOutAddress, address _to, uint _deadline) public payable {
+        let tx1 = await swapInstance.convertTokensToTokens( usdcBalance, legos.erc20.usdc.address, legos.erc20.dai.address, swapInstance.address,  _deadline, { 
+            from : _account,
+            ...gasParams
+         });
+
+        console.log('----------');
+        console.log(tx1.logs);
+        
+        let usdcBalanceUpdated = new BigNumber( await usdc.methods.balanceOf(swapInstance.address).call());
+        let daibalance = new BigNumber( await makerDai.methods.balanceOf(swapInstance.address).call());
+
+        assert.equal( usdcBalanceUpdated.isZero(), true);
+        assert.equal( daibalance.isZero(), false );
+        
+        console.log( "Daibalance : ", daibalance.toNumber() );
     });
 
 
-    it('Test Smartcontract Functions', async () => {
+    it.skip('Test Swap Functions', async () => {
 
         let _account = accounts[3];
         
@@ -60,7 +108,7 @@ contract('Flashloan', accounts  => {
         // Just send to smartcontract avaliable dai balance !!! 
         await makerDai.methods.transfer(swapInstance.address, daiABlance).send({ from : _account, ...gasParams });
 
-        //await makerDai.methods.approve(swapInstance.address, daiABlance);
+        // await makerDai.methods.approve(swapInstance.address, daiABlance);
 
         // Call convertTokensToTokens Function in uniswap 
         // function convertTokensToTokens(uint _tokenInAmount, address _tokenInAddress, address _tokenOutAddress, address _to, uint _deadline) public payable {

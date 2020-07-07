@@ -2,7 +2,9 @@
   "dependencies": {
     "@studydefi/money-legos": "^2.3.3",
     "@truffle/hdwallet-provider": "^1.0.30",
+    "@uniswap/sdk": "^2.0.6",
     "bignumber.js": "^9.0.0",
-    "dotenv": "^8.2.0"
+    "dotenv": "^8.2.0",
+    "lodash.flatmap": "^4.5.0"
   }
 }

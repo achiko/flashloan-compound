@@ -1,7 +1,9 @@
 # Sebastian Node  With network Id  :  
 
-ganache-cli -f http://85.10.193.71:8545 -i 1  --unlock=0x3c6809319201b978d821190ba03fa19a3523bd96 --unlock=0xb81e6058a9c917bf5d55887eaf5ef632ab57d64a
+ganache-cli -f http://95.217.193.89:7545 -i 1  --unlock=0x3c6809319201b978d821190ba03fa19a3523bd96 --unlock=0xb81e6058a9c917bf5d55887eaf5ef632ab57d64a
 
 ganache-cli -i 1 -f https://mainnet.infura.io/v3/716a47f6015f4235aa0b8b36e8280334  --unlock=0x3c6809319201b978d821190ba03fa19a3523bd96 --unlock=0xb81e6058a9c917bf5d55887eaf5ef632ab57d64a
+
+ganache-cli -i 1 -f https://da8f046de1d1472399b9a7e6a0365c91.eth.rpc.rivet.cloud/  --unlock=0x3c6809319201b978d821190ba03fa19a3523bd96 --unlock=0xb81e6058a9c917bf5d55887eaf5ef632ab57d64a
 
 

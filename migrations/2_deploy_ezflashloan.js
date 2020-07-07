@@ -4,9 +4,9 @@ let Swap = artifacts.require("Swap");
 module.exports = async function (deployer, accounts) {
     try {
         
-        // await deployer.deploy(Flashloan);
-        // const flashloan = await Flashloan.deployed();
-        // console.log('Flashloan Address : ', flashloan.address);
+        await deployer.deploy(Flashloan);
+        const flashloan = await Flashloan.deployed();
+        console.log('Flashloan Address : ', flashloan.address);
 
         await deployer.deploy(Swap);
         console.log('Uniswap Address : ', Swap.address);
