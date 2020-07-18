@@ -38,7 +38,7 @@ let swapInstance = null;
 
 contract('Flashloan', accounts  => {
 
-    before('Setup Contract', async () => { 
+    before('Setup Contracts ..... ', async () => { 
         flashLoanInstance = await Flashloan.deployed();
         swapInstance = await Swap.deployed();
     });
@@ -47,12 +47,24 @@ contract('Flashloan', accounts  => {
 
         let _account = accounts[8];
 
-        /* -------------  Function  params ----- */
-        let _borrower = "0x028547275c1c0b9f143c6aa9941ad60ca989c3e5"; // The borrower address ... 
-        let _repayAmount = new BigNumber(10).times(10**18);  // * 0.5 borrowed amount // To Do : Decimals ... 
         
-        let _cTockenBorrowed = "0x6c8c6b02e7b2be14d4fa6022dfd6d75921d90e4e"; 
-        let _cTokenCollateral = "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643"; 
+        await web3.eth.sendTransaction({ 
+            from : accounts[9],
+            to : flashLoanInstance.address, 
+            value : bignum(0.6).times(10**18).toFixed(),   
+            ... gasParams
+        });
+
+        let flashloanBalance = await web3.eth.getBalance(flashLoanInstance.address);
+        console.log('Flashloan Instance Balance : ', flashloanBalance , 'wei');
+
+        /* -------------  Function  params ----------- */
+        
+        let _borrower = "0xea3c266499f31a38d143d242f7ca51e7ca0d216d"; // The borrower address ... 
+        let _repayAmount = new BigNumber(0.15).times(10**18);  //
+        let _cTockenBorrowed = "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5";  // 
+        let _cTokenCollateral = "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643"; // 
+
         /* -------------------------------------- */
 
         let tx = await 
@@ -64,21 +76,47 @@ contract('Flashloan', accounts  => {
         console.log('------------');
         console.log( tx.logs );
         
-        // let { Failure } = tx.events;
+        console.log('Final Balance : ', await web3.eth.getBalance(flashLoanInstance.address));
 
+        // let { Failure } = tx.events;
         // console.log('-------------------------------------------');
         // if(Failure) {
         //     console.log('We Found Failure Event in Transaction Decode it !!! ');
         //     let { error , info,  detail } = Failure.returnValues;
-            
         //     console.log(`Error: ${error} , Info: ${ info } Detail: ${detail}  `);
         //     console.log('Error Desc : ', Error[error] );
         //     console.log('Failure Info :  : ', FailureInfo[info] );
         // } else {
         //     console.log('JUST PRINT NO FAILURE  ... ');
         // }
-        
+
+        console.log('----------------------');
+
+        //let { cTockenBorrowedContract, cTokenCollateralContract } = await generateContracts(_cTockenBorrowed, _cTokenCollateral);
+        //let tx = await cTockenBorrowedContract.methods.
+
+        // let _balance = await borrowedUnderlyingContract.methods.balanceOf( flashLoanInstance.address ).call();
+        // console.log('Smartcontract Balance :  ', cTockenBorrowedSymbol, ' Is: ', new BigNumber(_balance).div(10*18).toNumber() );
+
         assert(true, true);
     });
-
 });
+
+
+
+async function generateContracts(_cTockenBorrowed, _cTokenCollateral) {
+    
+    let cTockenBorrowedContract = new web3.eth.Contract(legos.compound.cToken.abi, _cTockenBorrowed);
+    let cTokenCollateralContract = new web3.eth.Contract(legos.compound.cToken.abi, _cTokenCollateral);
+
+    let cTockenBorrowedSymbol = await cTockenBorrowedContract.methods.symbol().call();
+    let cTokenCollateralSymbol = await cTokenCollateralContract.methods.symbol().call();
+
+    let cTockenBorrowUnderlyingAddress = await cTockenBorrowedContract.methods.underlying().call();
+    let cTokenCollateralUnderlyingAddress = await cTokenCollateralContract.methods.underlying().call();
+
+    let borrowedUnderlyingContract = new web3.eth.Contract(legos.erc20.abi, cTockenBorrowUnderlyingAddress);
+    let collateralUnderlyingContract = new web3.eth.Contract(legos.erc20.abi, cTokenCollateralUnderlyingAddress);
+
+    return { cTockenBorrowedContract, cTokenCollateralContract, borrowedUnderlyingContract, cTockenBorrowedSymbol };
+}

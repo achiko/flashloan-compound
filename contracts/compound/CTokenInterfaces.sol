@@ -248,6 +248,19 @@ contract CErc20Storage {
     address public underlying;
 }
 
+abstract contract CETHInterface is CErc20Storage {
+
+    function mint(uint mintAmount) external virtual returns (uint);
+    function redeem(uint redeemTokens) external virtual returns (uint);
+    function redeemUnderlying(uint redeemAmount) external virtual returns (uint);
+    function borrow(uint borrowAmount) external virtual returns (uint);
+    function repayBorrow(uint repayAmount) external virtual returns (uint);
+    function repayBorrowBehalf(address borrower, uint repayAmount) external virtual returns (uint);
+    function liquidateBorrow(address borrower, CTokenInterface cTokenCollateral) external virtual payable returns (uint);
+
+    // function liquidateBorrowEth(address borrower, CTokenInterface cTokenCollateral) external virtual payable returns (uint);
+}
+
 abstract contract CErc20Interface is CErc20Storage {
 
     /*** User Interface ***/
@@ -260,6 +273,7 @@ abstract contract CErc20Interface is CErc20Storage {
     function repayBorrowBehalf(address borrower, uint repayAmount) external virtual returns (uint);
     function liquidateBorrow(address borrower, uint repayAmount, CTokenInterface cTokenCollateral) external virtual returns (uint);
 
+    //function liquidateBorrowEth(address borrower, CTokenInterface cTokenCollateral) external virtual payable returns (uint);
 
     /*** Admin Functions ***/
 

@@ -14,6 +14,13 @@ module.exports = {
       network_id: "*",
       skipDryRun: true
     },
+    tenderly: {
+      host: "127.0.0.1",
+      port: 9545,
+      // gas: 20000000,
+      network_id: "*",
+      skipDryRun: true
+    }
     // mainnet: {
     //   provider: new HDWalletProvider(process.env.KEY, "https://mainnet.infura.io/" + process.env.INFURA_API_KEY),
     //   network_id: 1,

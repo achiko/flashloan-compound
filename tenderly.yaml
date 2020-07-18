@@ -1,0 +1,25 @@
+account_id: 2e5f58b6-1594-40c8-9cd4-2df0d7639a19
+project_slug: flashloan
+
+exports: # running tenderly export will export local transaction to the provided project
+  my-network:
+    project_slug: flashloan
+    rpc_address: 127.0.0.1:8545
+    protocol: http
+    forked_network: mainnet
+    chain_config:
+      homestead_block: 0 # (default 0)
+      eip150_block: 0 # (default 0)
+      eip150_hash: 0x0 # (default 0x0)
+      eip155_block: 0 # (default 0)
+      eip158_block: 0 # (default 0)
+      byzantium_block: 0 # (default 0)
+      constantinople_block: 0 # (default 0)
+      petersburg_block: 0 # (default 0)
+      istanbul_block: 0 # (default 0)
+
+#   my-company-network:
+#     project_slug: flashloan
+#     rpc_address: <>
+    # if you want to export to a shared project provide the full project identifier
+    # the identifier can be found in you Tenderly dashboard under the projects name

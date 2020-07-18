@@ -13,7 +13,7 @@ const makerDai = new web3.eth.Contract(legos.erc20.dai.abi, legos.erc20.dai.addr
 const usdc = new web3.eth.Contract(legos.erc20.usdc.abi, legos.erc20.usdc.address);
 
 const gasParams = {
-    gasLimit: web3.utils.toHex(1500000),      // posted at compound.finance/developers#gas-costs
+    gasLimit: web3.utils.toHex(1500000),     // posted at compound.finance/developers#gas-costs
     gasPrice: web3.utils.toHex(90000000000), // use ethgasstation.info (mainnet only) 40000000000
 };
 
