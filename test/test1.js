@@ -43,30 +43,32 @@ contract('Flashloan', accounts  => {
         swapInstance = await Swap.deployed();
     });
 
+
     it('Call Liquidation', async () => { 
 
-        let _account = accounts[8];
-
+        let _account = accounts[0]; // the owner !!! 
         
-        await web3.eth.sendTransaction({ 
-            from : accounts[9],
-            to : flashLoanInstance.address, 
-            value : bignum(0.6).times(10**18).toFixed(),   
-            ... gasParams
-        });
+        // await web3.eth.sendTransaction({ 
+        //     from : accounts[9],
+        //     to : flashLoanInstance.address, 
+        //     value : bignum(0.6).times(10**18).toFixed(),   
+        //     ... gasParams
+        // });
 
         let flashloanBalance = await web3.eth.getBalance(flashLoanInstance.address);
-        console.log('Flashloan Instance Balance : ', flashloanBalance , 'wei');
+        console.log('Flashloan Instance ETH Balance : ', flashloanBalance , 'wei');
 
         /* -------------  Function  params ----------- */
         
-        let _borrower = "0xea3c266499f31a38d143d242f7ca51e7ca0d216d"; // The borrower address ... 
-        let _repayAmount = new BigNumber(0.15).times(10**18);  //
-        let _cTockenBorrowed = "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5";  // 
-        let _cTokenCollateral = "0x5d3a536e4d6dbd6114cc1ead35777bab948e3643"; // 
+        let _borrower = "0x4a05b10f49cabfec5c8d41b804fc6a7303efe02d"; // The borrower address ... 
+        let _repayAmount = new BigNumber(50).times(10**6);  //
+        let _cTockenBorrowed = "0x39aa39c021dfbae8fac545936693ac917d5e7563";  // 
+        let _cTokenCollateral = "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5"; // 
+
+        let { borrowedUnderlyingContract } = await generateContracts(_cTockenBorrowed, _cTokenCollateral);
+        console.log(' Start balance :   ', await borrowedUnderlyingContract.methods.balanceOf( flashLoanInstance.address ).call());
 
         /* -------------------------------------- */
-
         let tx = await 
             flashLoanInstance.flashloan(_borrower, _repayAmount.toFixed(), _cTockenBorrowed, _cTokenCollateral, {
             from : _account, 
@@ -76,7 +78,7 @@ contract('Flashloan', accounts  => {
         console.log('------------');
         console.log( tx.logs );
         
-        console.log('Final Balance : ', await web3.eth.getBalance(flashLoanInstance.address));
+        //console.log('Final Balance : ', await web3.eth.getBalance(flashLoanInstance.address));
 
         // let { Failure } = tx.events;
         // console.log('-------------------------------------------');
@@ -90,13 +92,13 @@ contract('Flashloan', accounts  => {
         //     console.log('JUST PRINT NO FAILURE  ... ');
         // }
 
-        console.log('----------------------');
+        console.log('-------------');
 
-        //let { cTockenBorrowedContract, cTokenCollateralContract } = await generateContracts(_cTockenBorrowed, _cTokenCollateral);
-        //let tx = await cTockenBorrowedContract.methods.
-
-        // let _balance = await borrowedUnderlyingContract.methods.balanceOf( flashLoanInstance.address ).call();
-        // console.log('Smartcontract Balance :  ', cTockenBorrowedSymbol, ' Is: ', new BigNumber(_balance).div(10*18).toNumber() );
+        
+        let _balance = await borrowedUnderlyingContract.methods.balanceOf( flashLoanInstance.address ).call();
+        let _symbol = await borrowedUnderlyingContract.methods.symbol().call();
+        
+        console.log('Token : ', _symbol, ' Balance == ', new BigNumber(_balance).div(10**6).toNumber());
 
         assert(true, true);
     });
@@ -106,17 +108,36 @@ contract('Flashloan', accounts  => {
 
 async function generateContracts(_cTockenBorrowed, _cTokenCollateral) {
     
+    let cTockenBorrowUnderlyingAddress = null;
+    let cTokenCollateralUnderlyingAddress = null;
+    let borrowedUnderlyingContract = null;
+    let collateralUnderlyingContract = null;
+
     let cTockenBorrowedContract = new web3.eth.Contract(legos.compound.cToken.abi, _cTockenBorrowed);
     let cTokenCollateralContract = new web3.eth.Contract(legos.compound.cToken.abi, _cTokenCollateral);
 
     let cTockenBorrowedSymbol = await cTockenBorrowedContract.methods.symbol().call();
     let cTokenCollateralSymbol = await cTokenCollateralContract.methods.symbol().call();
 
-    let cTockenBorrowUnderlyingAddress = await cTockenBorrowedContract.methods.underlying().call();
-    let cTokenCollateralUnderlyingAddress = await cTokenCollateralContract.methods.underlying().call();
+    if( cTockenBorrowedSymbol !== 'cETH' ) {
+        cTockenBorrowUnderlyingAddress = await cTockenBorrowedContract.methods.underlying().call();
+        borrowedUnderlyingContract = new web3.eth.Contract(legos.erc20.abi, cTockenBorrowUnderlyingAddress);
+    }
 
-    let borrowedUnderlyingContract = new web3.eth.Contract(legos.erc20.abi, cTockenBorrowUnderlyingAddress);
-    let collateralUnderlyingContract = new web3.eth.Contract(legos.erc20.abi, cTokenCollateralUnderlyingAddress);
+    if( cTokenCollateralSymbol !== 'cETH' ) {
+        cTokenCollateralUnderlyingAddress = await cTokenCollateralContract.methods.underlying().call();
+        collateralUnderlyingContract = new web3.eth.Contract(legos.erc20.abi, cTokenCollateralUnderlyingAddress);
+    }
 
-    return { cTockenBorrowedContract, cTokenCollateralContract, borrowedUnderlyingContract, cTockenBorrowedSymbol };
+    console.log('cTockenBorrowUnderlyingAddress :  ',  cTockenBorrowedSymbol, cTockenBorrowUnderlyingAddress);
+    console.log('cTokenCollateralUnderlyingAddress :  ',  cTokenCollateralSymbol, cTokenCollateralUnderlyingAddress);
+
+    return {
+        cTockenBorrowedContract,
+        cTokenCollateralContract,
+        cTockenBorrowedSymbol,
+        cTokenCollateralSymbol,
+        borrowedUnderlyingContract,
+        collateralUnderlyingContract
+    }
 }

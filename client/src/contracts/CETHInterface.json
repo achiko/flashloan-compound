@@ -1,5 +1,5 @@
 {
-  "contractName": "CErc20Interface",
+  "contractName": "CETHInterface",
   "abi": [
     {
       "inputs": [],
@@ -141,11 +141,6 @@
           "type": "address"
         },
         {
-          "internalType": "uint256",
-          "name": "repayAmount",
-          "type": "uint256"
-        },
-        {
           "internalType": "contract CTokenInterface",
           "name": "cTokenCollateral",
           "type": "address"
@@ -159,30 +154,11 @@
           "type": "uint256"
         }
       ],
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [
-        {
-          "internalType": "uint256",
-          "name": "addAmount",
-          "type": "uint256"
-        }
-      ],
-      "name": "_addReserves",
-      "outputs": [
-        {
-          "internalType": "uint256",
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "stateMutability": "nonpayable",
+      "stateMutability": "payable",
       "type": "function"
     }
   ],
-  "metadata": "{\"compiler\":{\"version\":\"0.6.2+commit.bacdbe57\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"addAmount\",\"type\":\"uint256\"}],\"name\":\"_addReserves\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"borrowAmount\",\"type\":\"uint256\"}],\"name\":\"borrow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"repayAmount\",\"type\":\"uint256\"},{\"internalType\":\"contract CTokenInterface\",\"name\":\"cTokenCollateral\",\"type\":\"address\"}],\"name\":\"liquidateBorrow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"mintAmount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"redeemTokens\",\"type\":\"uint256\"}],\"name\":\"redeem\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"redeemAmount\",\"type\":\"uint256\"}],\"name\":\"redeemUnderlying\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"repayAmount\",\"type\":\"uint256\"}],\"name\":\"repayBorrow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"repayAmount\",\"type\":\"uint256\"}],\"name\":\"repayBorrowBehalf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"underlying\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{\"_addReserves(uint256)\":{\"notice\":\"* Admin Functions **\"},\"mint(uint256)\":{\"notice\":\"* User Interface **\"}}}},\"settings\":{\"compilationTarget\":{\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/compound/CTokenInterfaces.sol\":\"CErc20Interface\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/compound/CTokenInterfaces.sol\":{\"keccak256\":\"0xbadb75599f633e6280056268863d70d10a35b11d1bf265208da3bfc0e3db4537\",\"urls\":[\"bzz-raw://ffbf2729c442c0b2ef893f919feac663b41667070addcae3e12aaa830e8cdb63\",\"dweb:/ipfs/QmR4exrWXPxN2E5s1F2VWaa1oCPH8vqA4h9GzL1LKWKaFk\"]},\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/compound/ComptrollerInterface.sol\":{\"keccak256\":\"0xa4ccd367962e444a4676263371324e569ad35be90c5419b79f4ce41dc7ec9309\",\"urls\":[\"bzz-raw://f9dda7901da49f8260b9f6402ac03a1e5ad29f519505da96a3691d82d0ca2daa\",\"dweb:/ipfs/QmdEciviPY8GKjcmYtyPGS5sECS1y9KjqpBRCt2zefXxNe\"]},\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/compound/InterestRateModel.sol\":{\"keccak256\":\"0x7dca1f8a9e3f062b9dc4e1f96b7d34150a0a30572070261a6d19fe55fb233bb8\",\"urls\":[\"bzz-raw://04e04370096647010c8b9b20e8496a3ba0db70f243b5fedf3cfa3b6157a9c429\",\"dweb:/ipfs/QmP2ZLAZQbqoLcUFxUAXsoJvZ2jWgcfgcZJQHsUReix9ab\"]}},\"version\":1}",
+  "metadata": "{\"compiler\":{\"version\":\"0.6.2+commit.bacdbe57\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"borrowAmount\",\"type\":\"uint256\"}],\"name\":\"borrow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"internalType\":\"contract CTokenInterface\",\"name\":\"cTokenCollateral\",\"type\":\"address\"}],\"name\":\"liquidateBorrow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"mintAmount\",\"type\":\"uint256\"}],\"name\":\"mint\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"redeemTokens\",\"type\":\"uint256\"}],\"name\":\"redeem\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"redeemAmount\",\"type\":\"uint256\"}],\"name\":\"redeemUnderlying\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"repayAmount\",\"type\":\"uint256\"}],\"name\":\"repayBorrow\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"borrower\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"repayAmount\",\"type\":\"uint256\"}],\"name\":\"repayBorrowBehalf\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"underlying\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/compound/CTokenInterfaces.sol\":\"CETHInterface\"},\"evmVersion\":\"constantinople\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/compound/CTokenInterfaces.sol\":{\"keccak256\":\"0xbadb75599f633e6280056268863d70d10a35b11d1bf265208da3bfc0e3db4537\",\"urls\":[\"bzz-raw://ffbf2729c442c0b2ef893f919feac663b41667070addcae3e12aaa830e8cdb63\",\"dweb:/ipfs/QmR4exrWXPxN2E5s1F2VWaa1oCPH8vqA4h9GzL1LKWKaFk\"]},\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/compound/ComptrollerInterface.sol\":{\"keccak256\":\"0xa4ccd367962e444a4676263371324e569ad35be90c5419b79f4ce41dc7ec9309\",\"urls\":[\"bzz-raw://f9dda7901da49f8260b9f6402ac03a1e5ad29f519505da96a3691d82d0ca2daa\",\"dweb:/ipfs/QmdEciviPY8GKjcmYtyPGS5sECS1y9KjqpBRCt2zefXxNe\"]},\"/Users/achiko/Documents/elva/projects/defipools/flashloan-compound/contracts/compound/InterestRateModel.sol\":{\"keccak256\":\"0x7dca1f8a9e3f062b9dc4e1f96b7d34150a0a30572070261a6d19fe55fb233bb8\",\"urls\":[\"bzz-raw://04e04370096647010c8b9b20e8496a3ba0db70f243b5fedf3cfa3b6157a9c429\",\"dweb:/ipfs/QmP2ZLAZQbqoLcUFxUAXsoJvZ2jWgcfgcZJQHsUReix9ab\"]}},\"version\":1}",
   "bytecode": "0x",
   "deployedBytecode": "0x",
   "sourceMap": "",
@@ -13207,18 +13183,11 @@
   },
   "networks": {},
   "schemaVersion": "3.2.0",
-  "updatedAt": "2020-07-21T15:26:08.955Z",
+  "updatedAt": "2020-07-21T15:26:08.938Z",
   "devdoc": {
     "methods": {}
   },
   "userdoc": {
-    "methods": {
-      "_addReserves(uint256)": {
-        "notice": "* Admin Functions **"
-      },
-      "mint(uint256)": {
-        "notice": "* User Interface **"
-      }
-    }
+    "methods": {}
   }
 }

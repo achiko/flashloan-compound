@@ -37,22 +37,17 @@ contract Swap {
 	}
 
 	
-	//**  Convert ETH to Any kind of Tokens ...  **/
+	/**  Convert ETH to Any kind of Tokens ...  **/
 	function convertETHtoAnyToken(address _tokensOut, address _to) public payable {
-		
 		address[] memory path = new address[](2);
 		path[0] = uniswapRouter.WETH();
 		path[1] = _tokensOut;
-
 		uint[] memory amounts = uniswapRouter.getAmountsOut(msg.value, path);
-
 		emit Logamounts(amounts);
-
 		uniswapRouter.swapExactETHForTokens{value : msg.value}(0, path, _to, getNow());
-
 		//emit convertEthToAnyToken(_amount, _tokensOut, path);
 	}
-
+	
 	/* Convert ETH To Dai */
 	function convertEthToDai(uint daiAmount) public payable {
 
