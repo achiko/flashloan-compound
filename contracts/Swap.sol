@@ -1,4 +1,3 @@
-//pragma solidity ^0.5.15;
 pragma solidity >=0.6.2;
 
 import './uniswap/IUniswapV2Router02.sol';

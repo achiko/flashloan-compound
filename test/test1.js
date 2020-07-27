@@ -62,15 +62,15 @@ contract('Flashloan', accounts  => {
         
         let _borrower = "0x4a05b10f49cabfec5c8d41b804fc6a7303efe02d"; // The borrower address ... 
         let _repayAmount = new BigNumber(50).times(10**6);  //
-        let _cTockenBorrowed = "0x39aa39c021dfbae8fac545936693ac917d5e7563";  // 
+        let _cTokenBorrowed = "0x39aa39c021dfbae8fac545936693ac917d5e7563";  // 
         let _cTokenCollateral = "0x4ddc2d193948926d02f9b1fe9e1daa0718270ed5"; // 
 
-        let { borrowedUnderlyingContract } = await generateContracts(_cTockenBorrowed, _cTokenCollateral);
+        let { borrowedUnderlyingContract } = await generateContracts(_cTokenBorrowed, _cTokenCollateral);
         console.log(' Start balance :   ', await borrowedUnderlyingContract.methods.balanceOf( flashLoanInstance.address ).call());
 
         /* -------------------------------------- */
         let tx = await 
-            flashLoanInstance.flashloan(_borrower, _repayAmount.toFixed(), _cTockenBorrowed, _cTokenCollateral, {
+            flashLoanInstance.flashloan(_borrower, _repayAmount.toFixed(), _cTokenBorrowed, _cTokenCollateral, {
             from : _account, 
             ... gasParams 
         });
@@ -106,22 +106,22 @@ contract('Flashloan', accounts  => {
 
 
 
-async function generateContracts(_cTockenBorrowed, _cTokenCollateral) {
+async function generateContracts(_cTokenBorrowed, _cTokenCollateral) {
     
-    let cTockenBorrowUnderlyingAddress = null;
+    let cTokenBorrowUnderlyingAddress = null;
     let cTokenCollateralUnderlyingAddress = null;
     let borrowedUnderlyingContract = null;
     let collateralUnderlyingContract = null;
 
-    let cTockenBorrowedContract = new web3.eth.Contract(legos.compound.cToken.abi, _cTockenBorrowed);
+    let cTokenBorrowedContract = new web3.eth.Contract(legos.compound.cToken.abi, _cTokenBorrowed);
     let cTokenCollateralContract = new web3.eth.Contract(legos.compound.cToken.abi, _cTokenCollateral);
 
-    let cTockenBorrowedSymbol = await cTockenBorrowedContract.methods.symbol().call();
+    let cTokenBorrowedSymbol = await cTokenBorrowedContract.methods.symbol().call();
     let cTokenCollateralSymbol = await cTokenCollateralContract.methods.symbol().call();
 
-    if( cTockenBorrowedSymbol !== 'cETH' ) {
-        cTockenBorrowUnderlyingAddress = await cTockenBorrowedContract.methods.underlying().call();
-        borrowedUnderlyingContract = new web3.eth.Contract(legos.erc20.abi, cTockenBorrowUnderlyingAddress);
+    if( cTokenBorrowedSymbol !== 'cETH' ) {
+        cTokenBorrowUnderlyingAddress = await cTokenBorrowedContract.methods.underlying().call();
+        borrowedUnderlyingContract = new web3.eth.Contract(legos.erc20.abi, cTokenBorrowUnderlyingAddress);
     }
 
     if( cTokenCollateralSymbol !== 'cETH' ) {
@@ -129,13 +129,13 @@ async function generateContracts(_cTockenBorrowed, _cTokenCollateral) {
         collateralUnderlyingContract = new web3.eth.Contract(legos.erc20.abi, cTokenCollateralUnderlyingAddress);
     }
 
-    console.log('cTockenBorrowUnderlyingAddress :  ',  cTockenBorrowedSymbol, cTockenBorrowUnderlyingAddress);
+    console.log('cTokenBorrowUnderlyingAddress :  ',  cTokenBorrowedSymbol, cTokenBorrowUnderlyingAddress);
     console.log('cTokenCollateralUnderlyingAddress :  ',  cTokenCollateralSymbol, cTokenCollateralUnderlyingAddress);
 
     return {
-        cTockenBorrowedContract,
+        cTokenBorrowedContract: cTokenBorrowedContract,
         cTokenCollateralContract,
-        cTockenBorrowedSymbol,
+        cTokenBorrowedSymbol: cTokenBorrowedSymbol,
         cTokenCollateralSymbol,
         borrowedUnderlyingContract,
         collateralUnderlyingContract
