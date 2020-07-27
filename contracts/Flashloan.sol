@@ -6,29 +6,46 @@ import "./aave/ILendingPool.sol";
 import "./openzeppelin/IERC20.sol";
 import "./compound/CTokenInterfaces.sol";
 import "./compound/ComptrollerInterface.sol";
-import './uniswap/IUniswapV2Router02.sol';
-
+import "./uniswap/IUniswapV2Router02.sol";
 
 contract Flashloan is FlashLoanReceiverBase {
+    event LogConvertTokensToTokensEvent(
+        uint256 _tokenInAmount,
+        address _tokenInAddress,
+        address _tokenOutAddress,
+        address _to,
+        uint256 _deadline,
+        uint256[] amounts
+    );
 
-	event LogConvertTokensToTokensEvent(
-		uint _tokenInAmount,
-		address _tokenInAddress,
-		address _tokenOutAddress,
-		address _to,
-		uint _deadline,
-		uint[] amounts
-	);
-
-    event ExecuteOpreationEvent( address _reserve, uint256 _amount, uint256 _fee, bytes _params);
-    event GetAccountLiquidity( uint Error, uint liquidity, uint shortfall );
+    event ExecuteOpreationEvent(
+        address _reserve,
+        uint256 _amount,
+        uint256 _fee,
+        bytes _params
+    );
+    event GetAccountLiquidity(
+        uint256 Error,
+        uint256 liquidity,
+        uint256 shortfall
+    );
     event GetUnderlyingAddress(address _underlyingaddress);
-	event AccountTokenBalance(bool approveResponse, uint256 allowance, address cTokenRepay, address token,  uint balance, uint repayAmount);
-    event LiquidationEvent(uint _err);
-    event CTokenBalance(uint _balance);
-    event RedeemEvent(uint _redeemError);
-    event convertEthToAnyToken(uint _amount, address _tokensOut, address[] path);
-    
+    event AccountTokenBalance(
+        bool approveResponse,
+        uint256 allowance,
+        address cTokenRepay,
+        address token,
+        uint256 balance,
+        uint256 repayAmount
+    );
+    event LiquidationEvent(uint256 _err);
+    event CTokenBalance(uint256 _balance);
+    event RedeemEvent(uint256 _redeemError);
+    event convertEthToAnyToken(
+        uint256 _amount,
+        address _tokensOut,
+        address[] path
+    );
 
     uint256 public fee;
     address private _owner;
@@ -37,11 +54,12 @@ contract Flashloan is FlashLoanReceiverBase {
     IUniswapV2Router02 public uniswapRouter;
     ComptrollerInterface public comptroller;
 
-
-	address internal constant UNISWAP_ROUTER_ADDRESS = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
-    address internal constant CETH_ADDRESS = 0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5;
-    address internal constant ETH_RESERVE_ADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
-
+    address
+        internal constant UNISWAP_ROUTER_ADDRESS = 0x7a250d5630B4cF539739dF2C5dAcb4c659F2488D;
+    address
+        internal constant CETH_ADDRESS = 0x4Ddc2D193948926D02f9B1fE9e1daa0718270ED5;
+    address
+        internal constant ETH_RESERVE_ADDRESS = 0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE;
 
     /**
      * @dev Throws if called by any account other than the owner.
@@ -51,53 +69,55 @@ contract Flashloan is FlashLoanReceiverBase {
         _;
     }
 
-     modifier ensureTreasuryWallet() {
-        require(treasuryWallet != address(0), "There is No Treasury Wallet !!!");
+    modifier ensureTreasuryWallet() {
+        require(
+            treasuryWallet != address(0),
+            "There is No Treasury Wallet !!!"
+        );
         _;
     }
-
 
     constructor() public {
         address msgSender = msg.sender;
         _owner = msgSender;
-		uniswapRouter = IUniswapV2Router02(UNISWAP_ROUTER_ADDRESS);
+        uniswapRouter = IUniswapV2Router02(UNISWAP_ROUTER_ADDRESS);
     }
 
-	// receive() payable external {}
+    // receive() payable external {}
 
-    struct FlashloanLocalVars  {
-
+    struct FlashloanLocalVars {
         address _borrower;
-        uint _repayAmount;
+        uint256 _repayAmount;
         address _cTokenRepay;
         address _cTokenCollateral;
-
-        uint getLiquidityError;
-        uint liquidity;
-        uint shortfall;
+        uint256 getLiquidityError;
+        uint256 liquidity;
+        uint256 shortfall;
         address underlyingAddress;
-		address underlyingAddress1; // _cTokenCollateral underlying address
-        
-		uint liquidateBorrowError;
-		uint liquidateBorrowError1;
-
-        uint cTokenBalance;  // ctoken Balance after Liquidation
-        uint redeemErrorCode;
-
-		bool approveResponse;
-		uint256 allowance;
-
-		uint liquidatedAssetBalance;
-
+        address underlyingAddress1; // _cTokenCollateral underlying address
+        uint256 liquidateBorrowError;
+        uint256 liquidateBorrowError1;
+        uint256 cTokenBalance; // ctoken Balance after Liquidation
+        uint256 redeemErrorCode;
+        bool approveResponse;
+        uint256 allowance;
+        uint256 liquidatedAssetBalance;
         address path0;
         address path1;
         address path2;
     }
-    
-    function executeOperation(address _reserve, uint256 _amount, uint256 _fee, bytes calldata _params) external override {
 
-        require(_amount <= getBalanceInternal(address(this), _reserve), "Invalid balance, was the flashLoan successful?");
-        
+    function executeOperation(
+        address _reserve,
+        uint256 _amount,
+        uint256 _fee,
+        bytes calldata _params
+    ) external override {
+        require(
+            _amount <= getBalanceInternal(address(this), _reserve),
+            "Invalid balance, was the flashLoan successful?"
+        );
+
         FlashloanLocalVars memory vars;
 
         /* Decode _params */
@@ -106,167 +126,216 @@ contract Flashloan is FlashLoanReceiverBase {
             vars._repayAmount,
             vars._cTokenRepay,
             vars._cTokenCollateral
-
-        ) = abi.decode(_params,(address,uint,address,address));
-
+        ) = abi.decode(_params, (address, uint256, address, address));
 
         /* Get Underlying address of cTokenRepay  when cTokenRepay !== cETH */
-        if(vars._cTokenRepay != CETH_ADDRESS) { 
-            vars.underlyingAddress = CErc20Storage(vars._cTokenRepay).underlying();
-        }
-        
-        /* Get Underlying address  of colatreal  when _collateral !== cETH  */
-        if(vars._cTokenCollateral != CETH_ADDRESS) {
-            vars.underlyingAddress1 = CErc20Storage(vars._cTokenCollateral).underlying(); 
+        if (vars._cTokenRepay != CETH_ADDRESS) {
+            vars.underlyingAddress = CErc20Storage(vars._cTokenRepay)
+                .underlying();
         }
 
-        
-        
-        if( vars._cTokenRepay == CETH_ADDRESS ) {
-            
-            /* Liquidate call cEth */    
-            uint liquidateBorrowError = CETHInterface(vars._cTokenRepay).liquidateBorrow{value : vars._repayAmount}
-                                            ( vars._borrower, CTokenInterface(vars._cTokenCollateral) );
-            
+        /* Get Underlying address  of colatreal  when _collateral !== cETH  */
+        if (vars._cTokenCollateral != CETH_ADDRESS) {
+            vars.underlyingAddress1 = CErc20Storage(vars._cTokenCollateral)
+                .underlying();
+        }
+
+        if (vars._cTokenRepay == CETH_ADDRESS) {
+            /* Liquidate call cEth */
+
+            uint256 liquidateBorrowError = CETHInterface(vars._cTokenRepay)
+                .liquidateBorrow{value: vars._repayAmount}(
+                vars._borrower,
+                CTokenInterface(vars._cTokenCollateral)
+            );
+
             emit LiquidationEvent(liquidateBorrowError);
-            require(vars.liquidateBorrowError == 0, "Call Liquidation Error 1 !!! ");
+            require(
+                vars.liquidateBorrowError == 0,
+                "Call Liquidation Error 1 !!! "
+            );
 
             /* 1. Redeem liquidated Tokens !  */
-            
+
             /* Get Seized  CToken  Balance */
-            vars.cTokenBalance = CTokenInterface(vars._cTokenCollateral).balanceOf(address(this));
+            vars.cTokenBalance = CTokenInterface(vars._cTokenCollateral)
+                .balanceOf(address(this));
             emit CTokenBalance(vars.cTokenBalance);
 
-            /* Redeem Liquidated assets From CToken */	
-            
-            vars.redeemErrorCode = CErc20Interface(vars._cTokenCollateral).redeem(vars.cTokenBalance);
+            /* Redeem Liquidated assets From CToken */
+
+            vars.redeemErrorCode = CErc20Interface(vars._cTokenCollateral)
+                .redeem(vars.cTokenBalance);
             emit RedeemEvent(vars.redeemErrorCode);
             require(vars.redeemErrorCode == 0, "Redeem Token Error");
 
-            /* Swap Tokens To Ether !!! */ 
+            /* Swap Tokens To Ether !!! */
+
             address[] memory ethPath = new address[](2);
-            ethPath[0] = vars.underlyingAddress1; 
+            ethPath[0] = vars.underlyingAddress1;
             ethPath[1] = uniswapRouter.WETH();
 
-            uniswapRouter.swapExactTokensForETH(vars.cTokenBalance, 0, ethPath, address(this),  getNow() );
+            uniswapRouter.swapExactTokensForETH(
+                vars.cTokenBalance,
+                0,
+                ethPath,
+                address(this),
+                getNow()
+            );
         }
-        
 
-        if(vars._cTokenRepay != CETH_ADDRESS) { 
+        if (vars._cTokenRepay != CETH_ADDRESS) {
+            vars.approveResponse = IERC20(vars.underlyingAddress).approve(
+                vars._cTokenRepay,
+                vars._repayAmount
+            );
+            vars.allowance = IERC20(vars.underlyingAddress).allowance(
+                address(this),
+                vars._cTokenRepay
+            );
 
-            vars.approveResponse = IERC20(vars.underlyingAddress).approve(vars._cTokenRepay, vars._repayAmount);
-		    vars.allowance = IERC20(vars.underlyingAddress).allowance(address(this), vars._cTokenRepay);
+            uint256 tokenBalance = IERC20(vars.underlyingAddress).balanceOf(
+                address(this)
+            );
+            emit AccountTokenBalance(
+                vars.approveResponse,
+                vars.allowance,
+                vars._cTokenRepay,
+                vars.underlyingAddress,
+                tokenBalance,
+                vars._repayAmount
+            );
 
-		    uint tokenBalance = IERC20(vars.underlyingAddress).balanceOf(address(this));
-		    emit AccountTokenBalance(vars.approveResponse, vars.allowance, vars._cTokenRepay, vars.underlyingAddress, tokenBalance, vars._repayAmount);
+            // Here Add Approve
+            vars.liquidateBorrowError = CErc20Interface(vars._cTokenRepay)
+                .liquidateBorrow(
+                vars._borrower,
+                vars._repayAmount,
+                CTokenInterface(vars._cTokenCollateral)
+            );
 
-            // Here Add Approve 
-            vars.liquidateBorrowError = 
-                CErc20Interface(vars._cTokenRepay)
-                    .liquidateBorrow(vars._borrower,vars._repayAmount,CTokenInterface(vars._cTokenCollateral));
-
-            require(vars.liquidateBorrowError == 0, "Call Liquidation Error !!! ");
+            require(
+                vars.liquidateBorrowError == 0,
+                "Call Liquidation Error !!! "
+            );
 
             /* Get CToken Balance */
-            vars.cTokenBalance = CTokenInterface(vars._cTokenCollateral).balanceOf(address(this));
+            vars.cTokenBalance = CTokenInterface(vars._cTokenCollateral)
+                .balanceOf(address(this));
             emit CTokenBalance(vars.cTokenBalance);
 
-            /* Redeem Liquidated assets From CToken */	
-            vars.redeemErrorCode = CErc20Interface(vars._cTokenCollateral).redeem(vars.cTokenBalance);
+            /* Redeem Liquidated assets From CToken */
+
+            vars.redeemErrorCode = CErc20Interface(vars._cTokenCollateral)
+                .redeem(vars.cTokenBalance);
             emit RedeemEvent(vars.redeemErrorCode);
             require(vars.redeemErrorCode == 0, "Redeem Token Error");
 
-            
-            if(vars._cTokenCollateral == CETH_ADDRESS) {
+            if (vars._cTokenCollateral == CETH_ADDRESS) {
                 vars.path0 = uniswapRouter.WETH();
-            }else{
+            } else {
                 vars.path0 = vars.underlyingAddress1;
             }
 
             address[] memory path = new address[](2);
-            path[0] = vars.path0; // 
+            path[0] = vars.path0; //
             path[1] = vars.underlyingAddress;
 
-	        // uint[] memory amounts = uniswapRouter.getAmountsOut(msg.value, path);
-	        uniswapRouter.swapExactETHForTokens{value : address(this).balance}(0, path, address(this), getNow());
+            // uint[] memory amounts = uniswapRouter.getAmountsOut(msg.value, path);
+            uniswapRouter.swapExactETHForTokens{value: address(this).balance}(
+                0,
+                path,
+                address(this),
+                getNow()
+            );
         }
 
-
-
         fee = _fee;
-        uint totalDebt = _amount.add(_fee);
+        uint256 totalDebt = _amount.add(_fee);
         transferFundsBackToPoolInternal(_reserve, totalDebt);
     }
 
-
-    
+	
     function flashloan(
         address _borrower,
-        uint _repayAmount,
+        uint256 _repayAmount,
         CTokenInterface _cTokenRepay,
         CTokenInterface _cTokenCollateral
-    )
-        public onlyOwner
-    {
-
+    ) public onlyOwner {
         /* Encode Passed Data */
-        bytes memory data = abi.encode(_borrower,_repayAmount,_cTokenRepay,_cTokenCollateral);
-        
-		/* Get Underlying Token address Bat, Usdc etc...  */
+        bytes memory data = abi.encode(
+            _borrower,
+            _repayAmount,
+            _cTokenRepay,
+            _cTokenCollateral
+        );
+
+        /* Get Underlying Token address Bat, Usdc etc...  */
         address lendingAsset;
-        if(address(_cTokenRepay) ==  CETH_ADDRESS) {
+        if (address(_cTokenRepay) == CETH_ADDRESS) {
             lendingAsset = ETH_RESERVE_ADDRESS;
-        }else{
+        } else {
             lendingAsset = CErc20Storage(address(_cTokenRepay)).underlying();
         }
-    
-        ILendingPool lendingPool = ILendingPool(addressesProvider.getLendingPool());
+
+        ILendingPool lendingPool = ILendingPool(
+            addressesProvider.getLendingPool()
+        );
         lendingPool.flashLoan(address(this), lendingAsset, _repayAmount, data);
     }
 
+    /* @dev Swap ERC Tokens To Tokens : */
 
-	/* @dev Swap ERC Tokens To Tokens : */
+    function convertTokensToTokens(
+        uint256 _tokenInAmount,
+        address _tokenInAddress,
+        address _tokenOutAddress,
+        address _to,
+        uint256 _deadline
+    ) public payable {
+        /* Approve Router Address !!! */
+        IERC20(_tokenInAddress).approve(UNISWAP_ROUTER_ADDRESS, _tokenInAmount);
+        address[] memory path = new address[](2);
 
-	function convertTokensToTokens(
-		uint _tokenInAmount,
-		address _tokenInAddress,
-		address _tokenOutAddress,
-		address _to,
-		uint _deadline
-	) public payable {
-
-		/* Approve Router Address !!! */
-		IERC20(_tokenInAddress).approve(UNISWAP_ROUTER_ADDRESS,_tokenInAmount);
-		address[] memory path = new address[](2);
-		
         path[0] = _tokenInAddress;
         path[1] = uniswapRouter.WETH();
-		path[2] = _tokenOutAddress;
+        path[2] = _tokenOutAddress;
 
-		uint[] memory amounts = uniswapRouter.swapExactTokensForTokens(_tokenInAmount, 0, path, _to, _deadline);
+        uint256[] memory amounts = uniswapRouter.swapExactTokensForTokens(
+            _tokenInAmount,
+            0,
+            path,
+            _to,
+            _deadline
+        );
 
-		emit LogConvertTokensToTokensEvent(_tokenInAmount,_tokenInAddress,_tokenOutAddress,_to,_deadline, amounts);
-	}
-
+        emit LogConvertTokensToTokensEvent(
+            _tokenInAmount,
+            _tokenInAddress,
+            _tokenOutAddress,
+            _to,
+            _deadline,
+            amounts
+        );
+    }
 
     function setComptroller(ComptrollerInterface _comptroller) public {
         comptroller = _comptroller;
     }
 
+    function getNow() public view returns (uint256 _now) {
+        _now = now + 6000;
+    }
 
-	function getNow() public view returns (uint _now) {
-		_now = now + 6000; 
-	}
-    
     function setTreasuryWallet(address _wallet) public onlyOwner {
         treasuryWallet = _wallet;
     }
 
-    function getTreasuryWallet() public view returns(address _treasuryWallet) {
+    function getTreasuryWallet() public view returns (address _treasuryWallet) {
         _treasuryWallet = treasuryWallet;
     }
 
-    function getowner() public view returns(address ownerAddress) {
+    function getowner() public view returns (address ownerAddress) {
         ownerAddress = _owner;
     }
 
@@ -274,20 +343,26 @@ contract Flashloan is FlashLoanReceiverBase {
         return _owner;
     }
 
-    function getContractBalance() public view returns(uint) {
+    function getContractBalance() public view returns (uint256) {
         return address(this).balance;
     }
 
-    function getContractErc20Balance(address _underlyingAddress) public view returns(address _erc20Address, uint _balance) {
-        _balance =  IERC20(_underlyingAddress).balanceOf(address(this));
+    function getContractErc20Balance(address _underlyingAddress)
+        public
+        view
+        returns (address _erc20Address, uint256 _balance)
+    {
+        _balance = IERC20(_underlyingAddress).balanceOf(address(this));
         _erc20Address = _underlyingAddress;
-    } 
+    }
 
-    
-	function transferAllErc20Tokens(address _erc20address,  address _to) public onlyOwner returns (bool result) {
-        uint erc20Balance = IERC20(_erc20address).balanceOf( address(this) );
+    function transferAllErc20Tokens(address _erc20address, address _to)
+        public
+        onlyOwner
+        returns (bool result)
+    {
+        uint256 erc20Balance = IERC20(_erc20address).balanceOf(address(this));
         require(erc20Balance > 0, "NOT ENOUGH BALANCE");
         result = IERC20(_erc20address).transfer(_to, erc20Balance);
     }
-
 }
