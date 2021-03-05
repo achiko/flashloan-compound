@@ -206,7 +206,6 @@ contract Flashloan is FlashLoanReceiverBase {
                 vars._repayAmount
             );
 
-            // Here Add Approve
             vars.liquidateBorrowError = CErc20Interface(vars._cTokenRepay)
                 .liquidateBorrow(
                 vars._borrower,

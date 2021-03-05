@@ -1,9 +1,9 @@
 account_id: 2e5f58b6-1594-40c8-9cd4-2df0d7639a19
-project_slug: flashloan
+project_slug: flashloanUSDC
 
 exports: # running tenderly export will export local transaction to the provided project
   my-network:
-    project_slug: flashloan
+    project_slug: flashloanUSDC
     rpc_address: 127.0.0.1:8545
     protocol: http
     forked_network: mainnet
